@@ -1,0 +1,105 @@
+{% extends "layouts/navbar.html" %}
+
+{% block content %}
+<head>
+  <meta charset="UTF-8">
+  <title>Subnetzrechner</title>
+  <style>
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .results {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .results.show {
+      animation: fadeInUp 0.5s ease-out forwards;
+    }
+  </style>
+</head>
+<body>
+  <h1>Subnetzrechner</h1>
+
+  <div class="form-group">
+    <label for="ip">Basis-IP-Adresse:</label>
+    <input type="text" id="ip" placeholder="z.B. 192.168.0.0">
+  </div>
+
+  <div class="form-group">
+    <label for="subnets">Anzahl gewünschter Subnetze:</label>
+    <input type="number" id="subnets" min="1" value="5">
+  </div>
+
+  <button onclick="confirmBerechnung()">Berechnen</button>
+
+  <!-- Verbesserter Ergebnisbereich -->
+  <div class="results hidden" id="output">
+    <h2>Ergebnisse</h2>
+
+    <div class="result-item">
+      <label>Hosts pro Subnetz:</label>
+      <span id="hosts"></span>
+    </div>
+
+    <div class="result-item">
+      <label>Subnetzmaske:</label>
+      <span id="mask"></span>
+    </div>
+
+    <div class="result-item">
+      <label>Subnetzadressen:</label>
+      <ul id="subnets-list"></ul>
+    </div>
+  </div>
+
+  <script>
+    function confirmBerechnung() {
+      const confirmed = confirm("Möchtest du die Berechnung wirklich neu starten? Bereits angezeigte Ergebnisse werden überschrieben.");
+      if (confirmed) {
+        berechne();
+      }
+    }
+
+    async function berechne() {
+      const ip = document.getElementById("ip").value;
+      const subnets = parseInt(document.getElementById("subnets").value);
+      const output = document.getElementById("output");
+      const list = document.getElementById("subnets-list");
+
+      const res = await fetch("/api/symsub", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ip, subnets })
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        document.getElementById("hosts").textContent = data.hosts_per_subnet;
+        document.getElementById("mask").textContent = data.subnet_mask;
+
+        list.innerHTML = "";
+        data.subnet_addresses.forEach(addr => {
+          const li = document.createElement("li");
+          li.textContent = addr;
+          list.appendChild(li);
+        });
+
+        output.classList.remove("hidden");
+        output.classList.add("show");
+      } else {
+        alert("Fehler bei der Berechnung.");
+      }
+    }
+  </script>
+</body>
+{% endblock %}
