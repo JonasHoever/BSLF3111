@@ -33,3 +33,8 @@ class Create():                                                                 
             "subnet_mask": outnewsub,                                                               # Neue Subnetzmaske im CIDR-Format
             "subnet_addresses": subnetzadressen                                                     # Liste der Netzwerkadressen der Subnetze
         }
+
+    def symsubprefix(self, ipv4, countnet):
+        arr_basis_netz = list(map(int, ipv4.split(".")))
+        prefix = bin(arr_basis_netz[0])
+        return(prefix, arr_basis_netz[0])
