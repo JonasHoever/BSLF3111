@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Skript zum Bereitstellen/Aktualisieren einer Flask-Anwendung mit Gunicorn
+
+set -e # Skriptabbruch bei Fehlern
+
 echo "Lade Updates..."
 python3 -m pip install --upgrade pip
 
@@ -25,19 +29,18 @@ sleep 5
 
 echo "venv wurde installiert."
 
-# Neue Konsole mit aktivierter venv und Start von app.py
-# Für Linux gibt es keine direkte Entsprechung von 'start cmd /k' für eine neue, persistente Terminal-Session,
-# die den Kontext behält. Stattdessen wird hier der venv-Befehl direkt in der aktuellen Shell ausgeführt.
-# Wenn Sie eine neue, separate Terminalsitzung benötigen, müssten Sie eine Terminal-Emulator-Befehl wie 'gnome-terminal', 'konsole' oder 'xterm' verwenden.
-# Die meisten Server haben jedoch keine grafische Oberfläche, daher ist das Starten im aktuellen Terminal die Standardvorgehensweise.
-
 echo "Aktiviere virtuelle Umgebung und installiere Abhängigkeiten..."
 source venv/bin/activate
 pip install --upgrade pip
-pip install flask
+pip install flask gunicorn  # Gunicorn wird jetzt auch installiert
 
-echo "Starte Flask-Anwendung..."
-# Führen Sie 'app.py' aus. Beachten Sie, dass diese Zeile den Skriptfluss blockiert,
-# solange die Flask-App läuft. Um es im Hintergrund laufen zu lassen,
-# müssten Sie Tools wie 'nohup' oder 'screen' verwenden oder es als Systemd-Dienst konfigurieren.
-python app.py
+echo "Starte Flask-Anwendung mit Gunicorn..."
+#  Startet die Flask-Anwendung mit Gunicorn.
+#  --bind 0.0.0.0:3000: Bindet an alle verfügbaren Netzwerkschnittstellen auf Port 3000.
+#  wsgi:app:  Nimmt an, dass Ihre Flask-App in der 'app'-Variable der 'wsgi.py'-Datei definiert ist.
+#  Wenn Ihre Flask-App anders heißt oder in einer anderen Datei ist, passen Sie dies an.
+gunicorn --bind 0.0.0.0:3000 wsgi:app
+
+#  Wichtig: gunicorn läuft im Vordergrund und blockiert das Terminal.  Das ist
+#  normal für einen direkten Start.  Für den Hintergrundbetrieb in der Produktion
+#  sollten Sie Systemd oder ein ähnliches System verwenden.
