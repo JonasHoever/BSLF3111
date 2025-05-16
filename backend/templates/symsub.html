@@ -1,33 +1,116 @@
 {% extends "layouts/navbar.html" %}
 
 {% block content %}
-<head>
-  <meta charset="UTF-8">
-  <title>Subnetzrechner</title>
-  <style>
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
+<style>
+  /* === Page Entry === */
+  .page-enter {
+    opacity: 0;
+    transform: translateY(30px) scale(0.98);
+    animation: pageFadeIn 0.6s ease-out forwards;
+  }
 
-    .results {
+  @keyframes pageFadeIn {
+    0% {
+      opacity: 0;
+      transform: translateY(30px) scale(0.98);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  /* === Inputs & Form === */
+  .form-group {
+    margin-bottom: 1.5rem;
+    animation: fadeInUp 0.5s ease-out forwards;
+    opacity: 0;
+  }
+
+  .form-group:nth-child(1) { animation-delay: 0.2s; }
+  .form-group:nth-child(2) { animation-delay: 0.4s; }
+
+  input[type="text"],
+  input[type="number"] {
+    background: var(--graphite);
+    color: var(--white);
+    padding: 0.75rem;
+    border: none;
+    border-radius: var(--radius);
+    outline: none;
+    width: 100%;
+    transition: 0.3s ease;
+  }
+
+  input:focus {
+    border: 2px solid var(--neon-blue);
+    box-shadow: 0 0 8px var(--neon-blue);
+  }
+
+  /* === Button === */
+  button {
+    padding: 0.75rem 2rem;
+    border: none;
+    border-radius: var(--radius);
+    background: var(--neon-purple);
+    color: var(--onyx);
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+    animation: fadeInUp 0.5s ease forwards;
+    animation-delay: 0.6s;
+    opacity: 0;
+  }
+
+  button:hover {
+    background: var(--neon-green);
+    box-shadow: 0 0 10px var(--neon-green);
+  }
+
+  /* === Ergebnisanzeige === */
+  .results {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    margin-top: 2rem;
+    padding: 1rem;
+    border-radius: var(--radius);
+    border: 1px solid var(--neon-blue);
+    background: rgba(255, 255, 255, 0.03);
+    box-shadow: 0 0 10px rgba(0,255,255,0.1);
+  }
+
+  .results.show {
+    animation: fadeInUp 0.5s ease-out forwards;
+  }
+
+  .result-item {
+    margin-bottom: 1rem;
+  }
+
+  .result-item label {
+    font-weight: bold;
+    color: var(--neon-green);
+  }
+
+  ul {
+    list-style-type: square;
+    padding-left: 1.5rem;
+  }
+
+  @keyframes fadeInUp {
+    from {
       opacity: 0;
       transform: translateY(20px);
-      transition: opacity 0.3s ease, transform 0.3s ease;
     }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>
 
-    .results.show {
-      animation: fadeInUp 0.5s ease-out forwards;
-    }
-  </style>
-</head>
-<body>
+<div class="page-enter">
   <h1>Subnetzrechner</h1>
 
   <div class="form-group">
@@ -42,7 +125,6 @@
 
   <button onclick="confirmBerechnung()">Berechnen</button>
 
-  <!-- Verbesserter Ergebnisbereich -->
   <div class="results hidden" id="output">
     <h2>Ergebnisse</h2>
 
@@ -61,45 +143,45 @@
       <ul id="subnets-list"></ul>
     </div>
   </div>
+</div>
 
-  <script>
-    function confirmBerechnung() {
-      const confirmed = confirm("Möchtest du die Berechnung wirklich neu starten? Bereits angezeigte Ergebnisse werden überschrieben.");
-      if (confirmed) {
-        berechne();
-      }
+<script>
+  function confirmBerechnung() {
+    const confirmed = confirm("Möchtest du die Berechnung wirklich neu starten? Bereits angezeigte Ergebnisse werden überschrieben.");
+    if (confirmed) {
+      berechne();
     }
+  }
 
-    async function berechne() {
-      const ip = document.getElementById("ip").value;
-      const subnets = parseInt(document.getElementById("subnets").value);
-      const output = document.getElementById("output");
-      const list = document.getElementById("subnets-list");
+  async function berechne() {
+    const ip = document.getElementById("ip").value;
+    const subnets = parseInt(document.getElementById("subnets").value);
+    const output = document.getElementById("output");
+    const list = document.getElementById("subnets-list");
 
-      const res = await fetch("/api/symsub", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ip, subnets })
+    const res = await fetch("/api/symsub", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ip, subnets })
+    });
+
+    if (res.ok) {
+      const data = await res.json();
+      document.getElementById("hosts").textContent = data.hosts_per_subnet;
+      document.getElementById("mask").textContent = data.subnet_mask;
+
+      list.innerHTML = "";
+      data.subnet_addresses.forEach(addr => {
+        const li = document.createElement("li");
+        li.textContent = addr;
+        list.appendChild(li);
       });
 
-      if (res.ok) {
-        const data = await res.json();
-        document.getElementById("hosts").textContent = data.hosts_per_subnet;
-        document.getElementById("mask").textContent = data.subnet_mask;
-
-        list.innerHTML = "";
-        data.subnet_addresses.forEach(addr => {
-          const li = document.createElement("li");
-          li.textContent = addr;
-          list.appendChild(li);
-        });
-
-        output.classList.remove("hidden");
-        output.classList.add("show");
-      } else {
-        alert("Fehler bei der Berechnung.");
-      }
+      output.classList.remove("hidden");
+      output.classList.add("show");
+    } else {
+      alert("Fehler bei der Berechnung.");
     }
-  </script>
-</body>
+  }
+</script>
 {% endblock %}

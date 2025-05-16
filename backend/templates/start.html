@@ -1,5 +1,161 @@
 {% extends "layouts/navbar.html" %}
 
 {% block content %}
-<h1> Startseite </h1>
+<style>
+  /* === Animationen und Cyber-Onyx Effekt === */
+  .page-enter {
+    opacity: 0;
+    transform: scale(0.95);
+    filter: blur(8px);
+    animation: joinIn 0.8s ease-out forwards;
+  }
+
+  @keyframes joinIn {
+    0% { opacity: 0; transform: scale(0.95); filter: blur(8px); }
+    50% { opacity: 0.7; transform: scale(1.02); filter: blur(2px); }
+    100% { opacity: 1; transform: scale(1); filter: blur(0); }
+  }
+
+  .fade-out {
+    opacity: 1;
+    transition: opacity 0.5s ease;
+  }
+
+  .fade-out.out {
+    opacity: 0;
+  }
+
+  .hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 70vh;
+    text-align: center;
+    padding: 2rem;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--neon-purple);
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero h1 {
+    font-size: 3rem;
+    color: var(--neon-blue);
+    text-shadow: 0 0 10px var(--neon-blue);
+    margin-bottom: 1.5rem;
+    animation: glitch 2s infinite;
+  }
+
+  .hero p {
+    font-size: 1.2rem;
+    color: var(--white);
+    max-width: 600px;
+    margin-bottom: 2rem;
+  }
+
+  .hero a.cta {
+    text-decoration: none;
+    color: var(--graphite);
+    background: var(--neon-green);
+    padding: 0.75rem 2rem;
+    border-radius: var(--radius);
+    font-weight: bold;
+    box-shadow: 0 0 10px var(--neon-green);
+    transition: 0.3s ease-in-out;
+  }
+
+  .hero a.cta:hover {
+    background: var(--neon-purple);
+    color: var(--onyx);
+    box-shadow: 0 0 15px var(--neon-purple);
+  }
+
+  /* === Glitch Effekt (subtil) === */
+  @keyframes glitch {
+    0% { text-shadow: 1px 1px var(--neon-blue); }
+    20% { text-shadow: -1px -1px var(--neon-purple); }
+    40% { text-shadow: 1px -1px var(--neon-blue); }
+    60% { text-shadow: -1px 1px var(--neon-purple); }
+    80% { text-shadow: 1px 1px var(--neon-blue); }
+    100% { text-shadow: 0 0 10px var(--neon-blue); }
+  }
+
+  /* === Partikel === */
+  .particles {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: var(--neon-purple);
+    border-radius: 50%;
+    animation: float 10s infinite linear;
+    opacity: 0.6;
+  }
+
+  @keyframes float {
+    0% {
+      transform: translateY(100vh) scale(0.5);
+    }
+    100% {
+      transform: translateY(-10vh) scale(1);
+    }
+  }
+</style>
+
+<div id="main-content" class="page-enter fade-out">
+  <div class="hero">
+    <div class="particles" id="particles"></div>
+
+    <h1>Willkommen im Subnetz-Universum</h1>
+    <p>Starte jetzt deine Berechnung mit unserem smarten Subnetzrechner – schnell, sicher und modern.</p>
+    <a href="/symsub" class="cta" id="ctaBtn">Jetzt loslegen</a>
+  </div>
+</div>
+
+<!-- Klick-Sound -->
+<audio id="clickSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_f77662a3e4.mp3?filename=click-124467.mp3" preload="auto"></audio>
+
+<script>
+  // === Partikel generieren ===
+  const particleContainer = document.getElementById('particles');
+  for (let i = 0; i < 40; i++) {
+    const p = document.createElement('div');
+    p.classList.add('particle');
+    p.style.left = Math.random() * 100 + '%';
+    p.style.top = Math.random() * 100 + '%';
+    p.style.animationDuration = (5 + Math.random() * 5) + 's';
+    p.style.background = Math.random() > 0.5 ? 'var(--neon-blue)' : 'var(--neon-purple)';
+    particleContainer.appendChild(p);
+  }
+
+  // === Sound & Fade beim Klick ===
+  const cta = document.getElementById('ctaBtn');
+  const clickSound = document.getElementById('clickSound');
+  const main = document.getElementById('main-content');
+
+  cta.addEventListener('click', function (e) {
+    e.preventDefault();
+    clickSound.play();
+
+    // Fade Out Animation
+    main.classList.add('out');
+
+    // Verzögertes Weiterleiten
+    setTimeout(() => {
+      window.location.href = cta.getAttribute('href');
+    }, 500); // fade-out duration
+  });
+</script>
 {% endblock %}
