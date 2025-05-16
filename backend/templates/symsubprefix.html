@@ -1,0 +1,281 @@
+{% extends "layouts/navbar.html" %}
+
+{% block content %}
+<head>
+  <meta charset="UTF-8">
+  <title>Subnetzrechner</title>
+  <style>
+    /* CSS für Animationen und grundlegendes Layout */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .results {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .results.show {
+      animation: fadeInUp 0.5s ease-out forwards;
+    }
+
+    /* Bestehendes CSS für Formulare und Ergebnisse */
+    body {
+        margin: 0;
+        font-family: 'Inter', 'Segoe UI', sans-serif;
+        background: linear-gradient(135deg, #f3f4f7, #e1e7f0);
+        color: #222;
+        padding-top: 80px; /* Damit der Inhalt unter der festen Navbar angezeigt wird */
+    }
+
+    .container {
+        max-width: 720px;
+        margin: 3rem auto;
+        padding: 2rem;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+        margin-bottom: 3rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+        width: 100%;
+        max-width: 500px;
+    }
+
+    .form-group label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    .form-group input {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid #d0d5dd;
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: border 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .form-group input:focus {
+        border-color: #5c67f2;
+        box-shadow: 0 0 0 3px rgba(92, 103, 242, 0.25);
+        outline: none;
+    }
+
+    button {
+        background-color: #5c67f2;
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    button:hover {
+        background-color: #3f48c9;
+        transform: scale(1.05);
+    }
+
+    .results {
+        margin-top: 2rem;
+        background-color: #ffffff;
+        padding: 1.5rem;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        opacity: 0;
+        transform: translateY(20px);
+        animation: fadeInUp 0.5s ease-out forwards;
+    }
+
+    .results.hidden {
+        display: none;
+    }
+
+    .results h2 {
+        font-size: 1.5rem;
+        color: #5c67f2;
+        margin-bottom: 1.2rem;
+    }
+
+    /* Anpassung für die Anzeige mehrerer Subnetze */
+    .subnet-group {
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+        background-color: #f9f9fc;
+    }
+    .subnet-group h3 {
+        margin-top: 0;
+        color: #5c67f2;
+        font-size: 1.2rem;
+        margin-bottom: 1rem;
+    }
+    .subnet-group .result-item {
+        margin-bottom: 0.8rem; /* Etwas weniger Abstand innerhalb eines Subnetzes */
+    }
+    .subnet-group .result-item:last-child {
+        margin-bottom: 0;
+    }
+    .result-item label {
+        display: inline-block; /* Für besseres Alignment */
+        width: 150px; /* Feste Breite für Labels */
+        font-weight: 600;
+        color: #444;
+    }
+    .result-item span {
+        background-color: #f4f5fa;
+        padding: 0.4rem 0.8rem; /* Kleinere Polsterung */
+        border-radius: 4px;
+        font-family: monospace;
+        display: inline-block; /* Damit span auch die Breite respektiert */
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Subnetzrechner</h1>
+
+    <div class="form-group">
+      <label for="ip">Basis-IP-Adresse:</label>
+      <input type="text" id="ip" placeholder="z.B. 192.168.0.0">
+    </div>
+
+    <div class="form-group">
+      <label for="prefix">Präfixlänge (CIDR):</label>
+      <input type="number" id="prefix" min="0" max="32" value="24" placeholder="z.B. 24 für /24">
+    </div>
+
+    <div class="form-group">
+      <label for="countnet">Anzahl gewünschter Subnetze:</label>
+      <input type="number" id="countnet" min="1" value="3">
+    </div>
+
+    <button onclick="confirmBerechnung()">Berechnen</button>
+
+    <div class="results hidden" id="output">
+      <h2>Berechnete Subnetze</h2>
+      <div id="subnets-container">
+        </div>
+    </div>
+  </div>
+
+  <script>
+    function confirmBerechnung() {
+      const confirmed = confirm("Möchtest du die Berechnung wirklich neu starten? Bereits angezeigte Ergebnisse werden überschrieben.");
+      if (confirmed) {
+        berechne();
+      }
+    }
+
+    async function berechne() {
+      const ip = document.getElementById("ip").value;
+      const prefix = parseInt(document.getElementById("prefix").value);
+      const countnet = parseInt(document.getElementById("countnet").value);
+      const output = document.getElementById("output");
+      const subnetsContainer = document.getElementById("subnets-container");
+
+      // Optional: Leere vorherige Ergebnisse
+      subnetsContainer.innerHTML = "";
+      output.classList.remove("show"); // Animation zurücksetzen
+
+      // Basis-Validierung der Eingaben
+      if (!ip || !/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/.test(ip)) {
+        alert("Bitte eine gültige IPv4-Adresse eingeben (z.B. 192.168.0.0).");
+        return;
+      }
+      if (isNaN(prefix) || prefix < 0 || prefix > 32) {
+        alert("Bitte eine gültige Präfixlänge zwischen 0 und 32 eingeben.");
+        return;
+      }
+      if (isNaN(countnet) || countnet < 1) {
+        alert("Bitte eine Anzahl von Subnetzen von mindestens 1 eingeben.");
+        return;
+      }
+
+      try {
+        const res = await fetch("/api/symsubprefix", { // <-- Neuer API-Endpunkt
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ ipv4: ip, prefix: prefix, countnet: countnet }) // <-- Daten anpassen
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+
+          if (data.error) { // Fehler vom Backend abfangen
+            alert("Fehler bei der Berechnung: " + data.error);
+            return;
+          }
+
+          // Sicherstellen, dass 'subnets' ein Array ist und nicht leer
+          if (!data.subnets || data.subnets.length === 0) {
+            alert("Es wurden keine Subnetze berechnet. Bitte Eingaben prüfen.");
+            return;
+          }
+
+          data.subnets.forEach(subnet => {
+            const subnetGroup = document.createElement("div");
+            subnetGroup.classList.add("subnet-group");
+
+            const subnetTitle = document.createElement("h3");
+            subnetTitle.textContent = `Subnetz ${subnet.subnet_number} (${subnet.prefix_length})`;
+            subnetGroup.appendChild(subnetTitle);
+
+            // Helferfunktion, um Ergebnis-Items zu erstellen
+            const createResultItem = (label, value) => {
+              const div = document.createElement("div");
+              div.classList.add("result-item");
+              const labelElem = document.createElement("label");
+              labelElem.textContent = label + ":";
+              const spanElem = document.createElement("span");
+              spanElem.textContent = value;
+              div.appendChild(labelElem);
+              div.appendChild(spanElem);
+              return div;
+            };
+
+            subnetGroup.appendChild(createResultItem("Netzwerkadresse", subnet.network_address));
+            subnetGroup.appendChild(createResultItem("Broadcastadresse", subnet.broadcast_address));
+            subnetGroup.appendChild(createResultItem("Erster Host", subnet.first_host));
+            subnetGroup.appendChild(createResultItem("Letzter Host", subnet.last_host));
+            subnetGroup.appendChild(createResultItem("Nutzbare Hosts", subnet.usable_hosts));
+            subnetGroup.appendChild(createResultItem("Subnetzmaske", subnet.subnet_mask)); // Hier ist die dezimale Maske
+
+            subnetsContainer.appendChild(subnetGroup);
+          });
+
+          output.classList.remove("hidden");
+          output.classList.add("show"); // Animation starten
+
+        } else {
+          // Allgemeine Fehlerbehandlung für HTTP-Statuscodes ungleich 200
+          const errorText = await res.text();
+          alert(`Fehler bei der Serveranfrage: ${res.status} ${res.statusText}\nDetails: ${errorText}`);
+        }
+      } catch (error) {
+        console.error("Fehler beim Fetch-Vorgang:", error);
+        alert("Es ist ein unerwarteter Fehler aufgetreten. Bitte versuchen Sie es später erneut.");
+      }
+    }
+  </script>
+</body>
+{% endblock %}
