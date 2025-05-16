@@ -1,633 +1,521 @@
 /* Cyber-Onyx Style */
 :root {
-    --onyx: #0f0f0f;
-    --graphite: #1a1a1a;
-    --neon-blue: #00ffff;
-    --neon-purple: #a349a4;
-    --neon-green: #39ff14;
-    --white: #f0f0f0;
-    --transition: 0.3s ease-in-out;
-    --radius: 8px;
-    --blur-bg: rgba(26, 26, 26, 0.8); /* Etwas dunklerer Blur-Hintergrund für besseren Kontrast */
+  --onyx: #0f0f0f;
+  --graphite: #1a1a1a;
+  --neon-blue: #00ffff;
+  --neon-purple: #a349a4;
+  --neon-green: #39ff14;
+  --white: #f0f0f0;
+  --transition: 0.3s ease-in-out;
+  --radius: 8px;
+  --blur-bg: rgba(26, 26, 26, 0.8); /* Etwas dunklerer Blur-Hintergrund für besseren Kontrast */
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Fallback Schriftart */
+}
+
+body {
+  background: var(--onyx);
+  color: var(--white);
+  min-height: 100vh;
+  padding: 2rem;
+  font-family: 'Orbitron', sans-serif; /* Primäre Schriftart */
+  overflow-x: hidden;
+  background-image: radial-gradient(circle at top left, rgba(0,255,255,0.08), transparent 40%),
+                    radial-gradient(circle at bottom right, rgba(163,73,164,0.08), transparent 40%);
+}
+
+/* === NAVIGATION === */
+.navbar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem; /* Etwas mehr Abstand */
+  background: var(--blur-bg);
+  padding: 1rem 2rem;
+  border-radius: var(--radius);
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.15), 0 0 30px rgba(0, 255, 255, 0.1); /* Verstärkter Schatten */
+  position: sticky;
+  top: 1rem; /* Abstand vom oberen Rand */
+  z-index: 1000;
+  backdrop-filter: blur(10px); /* Stärkerer Blur-Effekt */
+  border: 1px solid rgba(0, 255, 255, 0.2); /* Subtile Umrandung */
+}
+
+.navbar .btn {
+  text-decoration: none;
+  color: var(--neon-blue);
+  padding: 0.75rem 1.5rem;
+  background: transparent;
+  border: 2px solid var(--neon-blue);
+  border-radius: var(--radius);
+  transition: var(--transition);
+  font-weight: bold;
+  text-transform: uppercase; /* Für den Cyber-Look */
+  letter-spacing: 1px; /* Für den Cyber-Look */
+}
+
+.navbar .btn:hover, .navbar .btn.active { /* :active oder eine .active Klasse für den aktuellen Link */
+  background: var(--neon-blue);
+  color: var(--graphite);
+  box-shadow: 0 0 15px var(--neon-blue), 0 0 30px var(--neon-blue);
+  transform: translateY(-2px) scale(1.05); /* Leichter Schwebe- und Vergrößerungseffekt */
+}
+
+/* === HEADINGS === */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--neon-purple);
+  text-shadow: 0 0 5px var(--neon-purple), 0 0 10px rgba(163, 73, 164, 0.7); /* Intensiverer Schatten */
+  margin-bottom: 1.5rem; /* Etwas mehr unterer Abstand */
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+h1 {
+  font-size: 2.8rem;
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+h2 {
+  font-size: 2.2rem;
+  border-bottom: 1px solid rgba(163, 73, 164, 0.3); /* Subtile Trennlinie */
+  padding-bottom: 0.5rem;
+}
+
+h3 {
+  font-size: 1.7rem;
+}
+
+/* === FORM CONTAINER (Optional) === */
+.form-container {
+  background: var(--blur-bg);
+  padding: 2rem;
+  border-radius: var(--radius);
+  border: 1px solid rgba(163,73,164,0.3);
+  box-shadow: 0 0 20px rgba(163,73,164,0.25);
+  margin-top: 2rem;
+  backdrop-filter: blur(5px);
+}
+
+/* === FORM ELEMENTS === */
+.form-group {
+  margin-bottom: 1.75rem; /* Etwas mehr Abstand */
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.75rem; /* Mehr Abstand zum Input */
+  color: var(--neon-green);
+  font-weight: bold;
+  text-shadow: 0 0 4px var(--neon-green);
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="search"],
+textarea,
+select {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--graphite); /* Leichte Umrandung standardmäßig */
+  border-radius: var(--radius);
+  background: var(--graphite);
+  color: var(--white);
+  outline: none;
+  transition: var(--transition);
+  font-size: 1rem;
+  box-shadow: inset 0 1px 4px rgba(0,0,0,0.4); /* Tieferer Innenschatten */
+}
+
+textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+select {
+  appearance: none; /* Custom select arrow */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%2300ffff' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 1em;
+  padding-right: 2.5rem; /* Platz für den Pfeil */
+}
+
+/* Spezifisches Styling für input[type="number"] gemäß Bild */
+input[type="number"] {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  padding-right: 2.5rem; /* Platz für das benutzerdefinierte Pfeil-Icon */
+  border-radius: var(--radius);
+  background: var(--graphite);
+  color: var(--white);
+  outline: none;
+  transition: var(--transition);
+  font-size: 1rem;
+  box-shadow: inset 0 1px 4px rgba(0,0,0,0.4);
+  border: 2px solid var(--neon-blue); /* Standardmäßige Neon-Blaue Umrandung, wie im Bild */
+
+  /* SVG für das Pfeil-Icon (ähnlich dem Bild, weiße Pfeile) */
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 12 12' version='1.1' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolyline points='3 4 6 1 9 4' stroke='%23f0f0f0' fill='transparent' stroke-width='1.5'/%3E%3Cpolyline points='3 8 6 11 9 8' stroke='%23f0f0f0' fill='transparent' stroke-width='1.5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center; /* Positionierung des Icons */
+  background-size: 12px 12px; /* Größe des Icons */
+}
+
+/* Fokus-Stile */
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="search"]:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--neon-purple); /* Umrandungsfarbe im Fokus */
+  box-shadow: inset 0 1px 4px rgba(0,0,0,0.4), 0 0 10px var(--neon-purple), 0 0 15px rgba(163, 73, 164, 0.5); /* Kombinierter Innen- und Außenschatten */
+}
+
+input[type="number"]:focus {
+  border-color: var(--neon-blue); /* Blaue Umrandung beibehalten oder intensivieren */
+  box-shadow: inset 0 1px 4px rgba(0,0,0,0.4), 0 0 15px var(--neon-blue), 0 0 25px rgba(0, 255, 255, 0.7); /* Intensiverer blauer Glow im Fokus */
+}
+
+/* Standard-Spinner für Nummer-Inputs ausblenden */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield; /* Firefox */
+}
+
+/* Checkbox und Radio Buttons */
+.form-group-inline {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 22px;
+  height: 22px;
+  background-color: var(--graphite);
+  border: 2px solid var(--neon-blue);
+  border-radius: 4px;
+  cursor: pointer;
+  position: relative;
+  transition: background-color var(--transition), border-color var(--transition), box-shadow var(--transition);
+  flex-shrink: 0;
+  display: inline-block; /* Korrekte Darstellung */
+  vertical-align: middle; /* Bessere Ausrichtung mit Text */
+}
+
+input[type="radio"] {
+  border-radius: 50%;
+}
+
+input[type="checkbox"]:checked,
+input[type="radio"]:checked {
+  background-color: var(--neon-blue);
+  border-color: var(--neon-blue);
+  box-shadow: 0 0 8px var(--neon-blue);
+}
+
+input[type="checkbox"]:checked::before {
+  content: '\\2713'; /* Häkchen */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--onyx);
+  font-size: 16px;
+  font-weight: bold;
+}
+
+input[type="radio"]:checked::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 10px;
+  height: 10px;
+  background-color: var(--onyx);
+  border-radius: 50%;
+}
+
+input[type="checkbox"]:hover,
+input[type="radio"]:hover {
+  border-color: var(--neon-green);
+  box-shadow: 0 0 8px var(--neon-green);
+}
+
+input[type="checkbox"]:focus-visible,
+input[type="radio"]:focus-visible {
+  outline: 2px solid var(--neon-purple);
+  outline-offset: 2px;
+  box-shadow: 0 0 8px var(--neon-purple);
+}
+
+
+/* === BUTTONS === */
+button, .btn, .btn-primary { /* .btn als generelle Klasse hinzugefügt */
+  background: var(--neon-purple);
+  color: var(--onyx);
+  padding: 0.85rem 1.75rem;
+  border: 2px solid var(--neon-purple); /* Passende Umrandung */
+  border-radius: var(--radius);
+  font-weight: bold;
+  cursor: pointer;
+  transition: var(--transition);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  display: inline-block;
+  text-align: center;
+  box-shadow: 0 0 8px rgba(163, 73, 164, 0.3);
+}
+
+button:hover, .btn:hover, .btn-primary:hover {
+  background: var(--neon-green);
+  color: var(--onyx);
+  border-color: var(--neon-green);
+  box-shadow: 0 0 12px var(--neon-green), 0 0 25px var(--neon-green);
+  transform: translateY(-2px) scale(1.03);
+}
+
+/* Sekundärer Button-Stil (z.B. für Navbar oder weniger wichtige Aktionen) */
+.btn-secondary {
+  background: transparent;
+  color: var(--neon-blue);
+  border: 2px solid var(--neon-blue);
+  box-shadow: none;
+}
+
+.btn-secondary:hover {
+  background: var(--neon-blue);
+  color: var(--graphite);
+  border-color: var(--neon-blue);
+  box-shadow: 0 0 10px var(--neon-blue), 0 0 20px var(--neon-blue);
+}
+
+
+/* === RESULTS / CARDS === */
+.results, .card {
+  margin-top: 2rem;
+  background: var(--blur-bg);
+  border: 1px solid var(--neon-blue);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  opacity: 0; /* Für Animation */
+  transform: translateY(20px); /* Für Animation */
+  transition: opacity 0.5s ease, transform 0.5s ease, box-shadow var(--transition), border-color var(--transition);
+  box-shadow: 0 0 15px rgba(0,255,255,0.15);
+  backdrop-filter: blur(5px);
+}
+
+.results:hover, .card:hover {
+    box-shadow: 0 0 25px rgba(0,255,255,0.35), 0 0 40px rgba(0,255,255,0.2);
+    border-color: var(--neon-blue); /* Sicherstellen, dass die Umrandung neon-blau ist */
+    transform: translateY(-5px); /* Leichter Anhebe-Effekt */
+}
+
+.results.show, .card.show {
+  opacity: 1;
+  transform: translateY(0);
+  animation: fadeInUp 0.5s ease forwards;
+}
+
+.result-item, .card-item {
+  margin-bottom: 1rem;
+  color: var(--white);
+}
+
+.result-item label, .card-item label {
+  font-weight: bold;
+  color: var(--neon-green);
+  text-shadow: 0 0 3px var(--neon-green);
+}
+
+ul {
+  padding-left: 0; /* Eigene Einrückung über li::before */
+  list-style-type: none;
+}
+
+ul li {
+  margin-bottom: 0.75rem;
+  padding-left: 1.8rem;
+  position: relative;
+  line-height: 1.6;
+}
+
+ul li::before {
+  content: '»'; /* Cyber-Pfeil oder \\25B8 für Dreieck */
+  position: absolute;
+  left: 0;
+  top: 0; /* Bessere Ausrichtung */
+  color: var(--neon-blue);
+  font-size: 1.2em; /* Etwas größer */
+  text-shadow: 0 0 5px var(--neon-blue);
+}
+
+/* Subnet groups / Content sections */
+.subnet-group, .content-section {
+  margin-top: 2rem;
+  padding: 1.75rem; /* Mehr Padding */
+  border: 1px solid var(--neon-purple);
+  border-radius: var(--radius);
+  background-color: var(--blur-bg);
+  box-shadow: 0 0 20px rgba(163, 73, 164, 0.35);
+  transition: box-shadow var(--transition), border-color var(--transition);
+  backdrop-filter: blur(5px);
+}
+
+.subnet-group:hover, .content-section:hover {
+    box-shadow: 0 0 30px rgba(163,73,164,0.55);
+    border-color: var(--neon-purple); /* Neon-Lila Umrandung beim Hover */
+    transform: scale(1.01); /* Leichter Zoom-Effekt */
+}
+
+/* === TABLES === */
+table {
+  width: 100%;
+  border-collapse: separate; /* Erlaubt border-spacing und border-radius auf Zellen */
+  border-spacing: 0;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+  background: var(--graphite);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: 0 0 15px rgba(0,0,0,0.5);
+  border: 1px solid var(--neon-purple); /* Rahmen für die gesamte Tabelle */
+}
+
+th, td {
+  padding: 1rem 1.25rem; /* Mehr Padding */
+  text-align: left;
+  border-bottom: 1px solid var(--onyx);
+}
+
+th {
+  background-color: rgba(163, 73, 164, 0.2); /* Lila-getönter Header */
+  color: var(--neon-purple);
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-bottom: 2px solid var(--neon-purple); /* Stärkere untere Linie für Header */
+}
+
+td {
+    color: var(--white);
+}
+
+tr:last-child td {
+  border-bottom: none;
+}
+
+tbody tr:hover {
+  background-color: rgba(0, 255, 255, 0.08); /* Subtiler blauer Hover für Zeilen */
+}
+
+td span.highlight-green {
+  color: var(--neon-green);
+  font-weight: bold;
+  text-shadow: 0 0 3px var(--neon-green);
+}
+
+td span.highlight-purple {
+  color: var(--neon-purple);
+  font-weight: bold;
+  text-shadow: 0 0 3px var(--neon-purple);
+}
+
+/* === SCROLLBAR (WebKit spezifisch) === */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--onyx);
+  border-radius: var(--radius);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--neon-blue);
+  border-radius: var(--radius);
+  border: 2px solid var(--onyx);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--neon-green);
+  box-shadow: 0 0 8px var(--neon-green);
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* === UTILITY CLASSES === */
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+.text-left { text-align: left; }
+
+.mt-1 { margin-top: 1rem !important; }
+.mt-2 { margin-top: 2rem !important; }
+.mb-1 { margin-bottom: 1rem !important; }
+.mb-2 { margin-bottom: 2rem !important; }
+.p-1 { padding: 1rem !important; }
+.p-2 { padding: 2rem !important; }
+
+.d-flex { display: flex !important; }
+.justify-content-between { justify-content: space-between !important; }
+.align-items-center { align-items: center !important; }
+
+.glow-text-blue {
+  color: var(--neon-blue);
+  text-shadow: 0 0 5px var(--neon-blue), 0 0 10px var(--neon-blue), 0 0 15px var(--neon-blue);
+}
+.glow-text-purple {
+  color: var(--neon-purple);
+  text-shadow: 0 0 5px var(--neon-purple), 0 0 10px var(--neon-purple), 0 0 15px var(--neon-purple);
+}
+.glow-text-green {
+  color: var(--neon-green);
+  text-shadow: 0 0 5px var(--neon-green), 0 0 10px var(--neon-green), 0 0 15px var(--neon-green);
+}
+
+/* === ANIMATIONS === */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
   }
-  
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Fallback Schriftart */
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
-  
-  body {
-    background: var(--onyx);
-    color: var(--white);
-    min-height: 100vh;
-    padding: 2rem;
-    font-family: 'Orbitron', sans-serif; /* Primäre Schriftart */
-    overflow-x: hidden;
-    background-image: radial-gradient(circle at top left, rgba(0,255,255,0.08), transparent 40%),
-                      radial-gradient(circle at bottom right, rgba(163,73,164,0.08), transparent 40%);
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 8px var(--current-glow-color, var(--neon-blue)), 0 0 12px var(--current-glow-color, var(--neon-blue));
   }
-  
-  /* === NAVIGATION === */
-  .navbar {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 1.5rem; /* Etwas mehr Abstand */
-    background: var(--blur-bg);
-    padding: 1rem 2rem;
-    border-radius: var(--radius);
-    box-shadow: 0 0 20px rgba(0, 255, 255, 0.15), 0 0 30px rgba(0, 255, 255, 0.1); /* Verstärkter Schatten */
-    position: sticky;
-    top: 1rem; /* Abstand vom oberen Rand */
-    z-index: 1000;
-    backdrop-filter: blur(10px); /* Stärkerer Blur-Effekt */
-    border: 1px solid rgba(0, 255, 255, 0.2); /* Subtile Umrandung */
+  50% {
+    box-shadow: 0 0 15px var(--current-glow-color, var(--neon-blue)), 0 0 25px var(--current-glow-color, var(--neon-blue));
   }
-  
-  .navbar .btn {
-    text-decoration: none;
-    color: var(--neon-blue);
-    padding: 0.75rem 1.5rem;
-    background: transparent;
-    border: 2px solid var(--neon-blue);
-    border-radius: var(--radius);
-    transition: var(--transition);
-    font-weight: bold;
-    text-transform: uppercase; /* Für den Cyber-Look */
-    letter-spacing: 1px; /* Für den Cyber-Look */
-  }
-  
-  .navbar .btn:hover, .navbar .btn.active { /* :active oder eine .active Klasse für den aktuellen Link */
-    background: var(--neon-blue);
-    color: var(--graphite);
-    box-shadow: 0 0 15px var(--neon-blue), 0 0 30px var(--neon-blue);
-    transform: translateY(-2px) scale(1.05); /* Leichter Schwebe- und Vergrößerungseffekt */
-  }
-  
-  /* === HEADINGS === */
-  h1, h2, h3, h4, h5, h6 {
-    color: var(--neon-purple);
-    text-shadow: 0 0 5px var(--neon-purple), 0 0 10px rgba(163, 73, 164, 0.7); /* Intensiverer Schatten */
-    margin-bottom: 1.5rem; /* Etwas mehr unterer Abstand */
-    font-weight: 600;
-    letter-spacing: 0.5px;
-  }
-  
-  h1 {
-    font-size: 2.8rem;
-    text-align: center;
-    margin-bottom: 2.5rem;
-  }
-  
-  h2 {
-    font-size: 2.2rem;
-    border-bottom: 1px solid rgba(163, 73, 164, 0.3); /* Subtile Trennlinie */
-    padding-bottom: 0.5rem;
-  }
-  
-  h3 {
-    font-size: 1.7rem;
-  }
-  
-  /* === FORM CONTAINER (Optional) === */
-  .form-container {
-    background: var(--blur-bg);
-    padding: 2rem;
-    border-radius: var(--radius);
-    border: 1px solid rgba(163,73,164,0.3);
-    box-shadow: 0 0 20px rgba(163,73,164,0.25);
-    margin-top: 2rem;
-    backdrop-filter: blur(5px);
-  }
-  
-  /* === FORM ELEMENTS === */
-  .form-group {
-    margin-bottom: 1.75rem; /* Etwas mehr Abstand */
-  }
-  
-  .form-group label {
-    display: block;
-    margin-bottom: 0.75rem; /* Mehr Abstand zum Input */
-    color: var(--neon-green);
-    font-weight: bold;
-    text-shadow: 0 0 4px var(--neon-green);
-  }
-  
-  input[type="text"],
-  input[type="email"],
-  input[type="password"],
-  input[type="search"],
-  textarea,
-  select {
-    width: 100%;
-    padding: 0.85rem 1rem;
-    border: 1px solid var(--graphite); /* Leichte Umrandung standardmäßig */
-    border-radius: var(--radius);
-    background: var(--graphite);
-    color: var(--white);
-    outline: none;
-    transition: var(--transition);
-    font-size: 1rem;
-    box-shadow: inset 0 1px 4px rgba(0,0,0,0.4); /* Tieferer Innenschatten */
-  }
-  
-  textarea {
-    min-height: 120px;
-    resize: vertical;
-  }
-  
-  select {
-    appearance: none; /* Custom select arrow */
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%2300ffff' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 1rem center;
-    background-size: 1em;
-    padding-right: 2.5rem; /* Platz für den Pfeil */
-  }
-  
-  /* Spezifisches Styling für input[type="number"] gemäß Bild */
-  input[type="number"] {
-    width: 100%;
-    padding: 0.85rem 1rem;
-    padding-right: 2.5rem; /* Platz für das benutzerdefinierte Pfeil-Icon */
-    border-radius: var(--radius);
-    background: var(--graphite);
-    color: var(--white);
-    outline: none;
-    transition: var(--transition);
-    font-size: 1rem;
-    box-shadow: inset 0 1px 4px rgba(0,0,0,0.4);
-    border: 2px solid var(--neon-blue); /* Standardmäßige Neon-Blaue Umrandung, wie im Bild */
-  
-    /* SVG für das Pfeil-Icon (ähnlich dem Bild, weiße Pfeile) */
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 12 12' version='1.1' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolyline points='3 4 6 1 9 4' stroke='%23f0f0f0' fill='transparent' stroke-width='1.5'/%3E%3Cpolyline points='3 8 6 11 9 8' stroke='%23f0f0f0' fill='transparent' stroke-width='1.5'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 0.75rem center; /* Positionierung des Icons */
-    background-size: 12px 12px; /* Größe des Icons */
-  }
-  
-  /* Fokus-Stile */
-  input[type="text"]:focus,
-  input[type="email"]:focus,
-  input[type="password"]:focus,
-  input[type="search"]:focus,
-  textarea:focus,
-  select:focus {
-    border-color: var(--neon-purple); /* Umrandungsfarbe im Fokus */
-    box-shadow: inset 0 1px 4px rgba(0,0,0,0.4), 0 0 10px var(--neon-purple), 0 0 15px rgba(163, 73, 164, 0.5); /* Kombinierter Innen- und Außenschatten */
-  }
-  
-  input[type="number"]:focus {
-    border-color: var(--neon-blue); /* Blaue Umrandung beibehalten oder intensivieren */
-    box-shadow: inset 0 1px 4px rgba(0,0,0,0.4), 0 0 15px var(--neon-blue), 0 0 25px rgba(0, 255, 255, 0.7); /* Intensiverer blauer Glow im Fokus */
-  }
-  
-  /* Standard-Spinner für Nummer-Inputs ausblenden */
-  input[type="number"]::-webkit-outer-spin-button,
-  input[type="number"]::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
-  input[type="number"] {
-    -moz-appearance: textfield; /* Firefox */
-  }
-  
-  /* Checkbox und Radio Buttons */
-  .form-group-inline {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-  }
-  
-  input[type="checkbox"],
-  input[type="radio"] {
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    width: 22px;
-    height: 22px;
-    background-color: var(--graphite);
-    border: 2px solid var(--neon-blue);
-    border-radius: 4px;
-    cursor: pointer;
-    position: relative;
-    transition: background-color var(--transition), border-color var(--transition), box-shadow var(--transition);
-    flex-shrink: 0;
-    display: inline-block; /* Korrekte Darstellung */
-    vertical-align: middle; /* Bessere Ausrichtung mit Text */
-  }
-  
-  input[type="radio"] {
-    border-radius: 50%;
-  }
-  
-  input[type="checkbox"]:checked,
-  input[type="radio"]:checked {
-    background-color: var(--neon-blue);
-    border-color: var(--neon-blue);
-    box-shadow: 0 0 8px var(--neon-blue);
-  }
-  
-  input[type="checkbox"]:checked::before {
-    content: '\\2713'; /* Häkchen */
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: var(--onyx);
-    font-size: 16px;
-    font-weight: bold;
-  }
-  
-  input[type="radio"]:checked::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 10px;
-    height: 10px;
-    background-color: var(--onyx);
-    border-radius: 50%;
-  }
-  
-  input[type="checkbox"]:hover,
-  input[type="radio"]:hover {
-    border-color: var(--neon-green);
-    box-shadow: 0 0 8px var(--neon-green);
-  }
-  
-  input[type="checkbox"]:focus-visible,
-  input[type="radio"]:focus-visible {
-    outline: 2px solid var(--neon-purple);
-    outline-offset: 2px;
-    box-shadow: 0 0 8px var(--neon-purple);
-  }
-  
-  
-  /* === BUTTONS === */
-  button, .btn, .btn-primary { /* .btn als generelle Klasse hinzugefügt */
-    background: var(--neon-purple);
-    color: var(--onyx);
-    padding: 0.85rem 1.75rem;
-    border: 2px solid var(--neon-purple); /* Passende Umrandung */
-    border-radius: var(--radius);
-    font-weight: bold;
-    cursor: pointer;
-    transition: var(--transition);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    display: inline-block;
-    text-align: center;
-    box-shadow: 0 0 8px rgba(163, 73, 164, 0.3);
-  }
-  
-  button:hover, .btn:hover, .btn-primary:hover {
-    background: var(--neon-green);
-    color: var(--onyx);
-    border-color: var(--neon-green);
-    box-shadow: 0 0 12px var(--neon-green), 0 0 25px var(--neon-green);
-    transform: translateY(-2px) scale(1.03);
-  }
-  
-  /* Sekundärer Button-Stil (z.B. für Navbar oder weniger wichtige Aktionen) */
-  .btn-secondary {
-    background: transparent;
-    color: var(--neon-blue);
-    border: 2px solid var(--neon-blue);
-    box-shadow: none;
-  }
-  
-  .btn-secondary:hover {
-    background: var(--neon-blue);
-    color: var(--graphite);
-    border-color: var(--neon-blue);
-    box-shadow: 0 0 10px var(--neon-blue), 0 0 20px var(--neon-blue);
-  }
-  
-  
-  /* === RESULTS / CARDS === */
-  .results, .card {
-    margin-top: 2rem;
-    background: var(--blur-bg);
-    border: 1px solid var(--neon-blue);
-    border-radius: var(--radius);
-    padding: 1.5rem;
-    opacity: 0; /* Für Animation */
-    transform: translateY(20px); /* Für Animation */
-    transition: opacity 0.5s ease, transform 0.5s ease, box-shadow var(--transition), border-color var(--transition);
-    box-shadow: 0 0 15px rgba(0,255,255,0.15);
-    backdrop-filter: blur(5px);
-  }
-  
-  .results:hover, .card:hover {
-      box-shadow: 0 0 25px rgba(0,255,255,0.35), 0 0 40px rgba(0,255,255,0.2);
-      border-color: var(--neon-blue); /* Sicherstellen, dass die Umrandung neon-blau ist */
-      transform: translateY(-5px); /* Leichter Anhebe-Effekt */
-  }
-  
-  .results.show, .card.show {
-    opacity: 1;
-    transform: translateY(0);
-    animation: fadeInUp 0.5s ease forwards;
-  }
-  
-  .result-item, .card-item {
-    margin-bottom: 1rem;
-    color: var(--white);
-  }
-  
-  .result-item label, .card-item label {
-    font-weight: bold;
-    color: var(--neon-green);
-    text-shadow: 0 0 3px var(--neon-green);
-  }
-  
-  ul {
-    padding-left: 0; /* Eigene Einrückung über li::before */
-    list-style-type: none;
-  }
-  
-  ul li {
-    margin-bottom: 0.75rem;
-    padding-left: 1.8rem;
-    position: relative;
-    line-height: 1.6;
-  }
-  
-  ul li::before {
-    content: '»'; /* Cyber-Pfeil oder \\25B8 für Dreieck */
-    position: absolute;
-    left: 0;
-    top: 0; /* Bessere Ausrichtung */
-    color: var(--neon-blue);
-    font-size: 1.2em; /* Etwas größer */
-    text-shadow: 0 0 5px var(--neon-blue);
-  }
-  
-  /* Subnet groups / Content sections */
-  .subnet-group, .content-section {
-    margin-top: 2rem;
-    padding: 1.75rem; /* Mehr Padding */
-    border: 1px solid var(--neon-purple);
-    border-radius: var(--radius);
-    background-color: var(--blur-bg);
-    box-shadow: 0 0 20px rgba(163, 73, 164, 0.35);
-    transition: box-shadow var(--transition), border-color var(--transition);
-    backdrop-filter: blur(5px);
-  }
-  
-  .subnet-group:hover, .content-section:hover {
-      box-shadow: 0 0 30px rgba(163,73,164,0.55);
-      border-color: var(--neon-purple); /* Neon-Lila Umrandung beim Hover */
-      transform: scale(1.01); /* Leichter Zoom-Effekt */
-  }
-  
-  /* === TABLES === */
-  table {
-    width: 100%;
-    border-collapse: separate; /* Erlaubt border-spacing und border-radius auf Zellen */
-    border-spacing: 0;
-    margin-top: 1.5rem;
-    margin-bottom: 1.5rem;
-    background: var(--graphite);
-    border-radius: var(--radius);
-    overflow: hidden;
-    box-shadow: 0 0 15px rgba(0,0,0,0.5);
-    border: 1px solid var(--neon-purple); /* Rahmen für die gesamte Tabelle */
-  }
-  
-  th, td {
-    padding: 1rem 1.25rem; /* Mehr Padding */
-    text-align: left;
-    border-bottom: 1px solid var(--onyx);
-  }
-  
-  th {
-    background-color: rgba(163, 73, 164, 0.2); /* Lila-getönter Header */
-    color: var(--neon-purple);
-    font-weight: bold;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    border-bottom: 2px solid var(--neon-purple); /* Stärkere untere Linie für Header */
-  }
-  
-  td {
-      color: var(--white);
-  }
-  
-  tr:last-child td {
-    border-bottom: none;
-  }
-  
-  tbody tr:hover {
-    background-color: rgba(0, 255, 255, 0.08); /* Subtiler blauer Hover für Zeilen */
-  }
-  
-  td span.highlight-green {
-    color: var(--neon-green);
-    font-weight: bold;
-    text-shadow: 0 0 3px var(--neon-green);
-  }
-  
-  td span.highlight-purple {
-    color: var(--neon-purple);
-    font-weight: bold;
-    text-shadow: 0 0 3px var(--neon-purple);
-  }
-  
-  /* === SCROLLBAR (WebKit spezifisch) === */
-  ::-webkit-scrollbar {
-    width: 12px;
-    height: 12px;
-  }
-  
-  ::-webkit-scrollbar-track {
-    background: var(--onyx);
-    border-radius: var(--radius);
-  }
-  
-  ::-webkit-scrollbar-thumb {
-    background: var(--neon-blue);
-    border-radius: var(--radius);
-    border: 2px solid var(--onyx);
-  }
-  
-  ::-webkit-scrollbar-thumb:hover {
-    background: var(--neon-green);
-    box-shadow: 0 0 8px var(--neon-green);
-  }
-  
-  ::-webkit-scrollbar-corner {
-    background: transparent;
-  }
-  
-  /* === UTILITY CLASSES === */
-  .text-center { text-align: center; }
-  .text-right { text-align: right; }
-  .text-left { text-align: left; }
-  
-  .mt-1 { margin-top: 1rem !important; }
-  .mt-2 { margin-top: 2rem !important; }
-  .mb-1 { margin-bottom: 1rem !important; }
-  .mb-2 { margin-bottom: 2rem !important; }
-  .p-1 { padding: 1rem !important; }
-  .p-2 { padding: 2rem !important; }
-  
-  .d-flex { display: flex !important; }
-  .justify-content-between { justify-content: space-between !important; }
-  .align-items-center { align-items: center !important; }
-  
-  .glow-text-blue {
-    color: var(--neon-blue);
-    text-shadow: 0 0 5px var(--neon-blue), 0 0 10px var(--neon-blue), 0 0 15px var(--neon-blue);
-  }
-  .glow-text-purple {
-    color: var(--neon-purple);
-    text-shadow: 0 0 5px var(--neon-purple), 0 0 10px var(--neon-purple), 0 0 15px var(--neon-purple);
-  }
-  .glow-text-green {
-    color: var(--neon-green);
-    text-shadow: 0 0 5px var(--neon-green), 0 0 10px var(--neon-green), 0 0 15px var(--neon-green);
-  }
-  
-  /* === ANIMATIONS === */
-  @keyframes fadeInUp {
-    from {
-      opacity: 0;
-      transform: translateY(30px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  @keyframes pulseGlow {
-    0%, 100% {
-      box-shadow: 0 0 8px var(--current-glow-color, var(--neon-blue)), 0 0 12px var(--current-glow-color, var(--neon-blue));
-    }
-    50% {
-      box-shadow: 0 0 15px var(--current-glow-color, var(--neon-blue)), 0 0 25px var(--current-glow-color, var(--neon-blue));
-    }
-  }
-  /* Beispiel für pulseGlow mit variabler Farbe:
-     .element {
-       --current-glow-color: var(--neon-green); // Überschreibt die Standardfarbe
-       animation: pulseGlow 2s infinite;
-     }
-  */
-  
-  /* === MOBILE RESPONSIVENESS === */
-  @media (max-width: 768px) {
-    body {
-      padding: 1rem; /* Reduziere das Padding auf kleineren Bildschirmen */
-    }
-  
-    .navbar {
-      flex-direction: column; /* Navigationselemente vertikal anordnen */
-      gap: 0.75rem; /* Abstand zwischen den Elementen reduzieren */
-      padding: 0.75rem 1rem; /* Padding der Navbar anpassen */
-      top: 0.5rem; /* Abstand vom oberen Rand reduzieren */
-    }
-  
-    .navbar .btn {
-      width: 100%; /* Buttons die volle Breite einnehmen lassen */
-      text-align: center; /* Text zentrieren */
-      padding: 0.75rem 1rem; /* Padding anpassen */
-    }
-  
-    h1 {
-      font-size: 2rem; /* Schriftgröße von H1 reduzieren */
-      margin-bottom: 1.5rem;
-    }
-  
-    h2 {
-      font-size: 1.6rem; /* Schriftgröße von H2 reduzieren */
-    }
-  
-    h3 {
-      font-size: 1.3rem; /* Schriftgröße von H3 reduzieren */
-    }
-  
-    .form-container {
-      padding: 1.5rem; /* Padding im Formularcontainer reduzieren */
-    }
-  
-    .form-group {
-      margin-bottom: 1.25rem; /* Abstand zwischen Formulargruppen reduzieren */
-    }
-  
-    input[type="text"],
-    input[type="email"],
-    input[type="password"],
-    input[type="search"],
-    textarea,
-    select,
-    input[type="number"] {
-      padding: 0.75rem 0.85rem; /* Padding der Inputfelder anpassen */
-      font-size: 0.95rem; /* Schriftgröße der Inputfelder anpassen */
-    }
-  
-    select {
-      background-position: right 0.75rem center; /* Position des Select-Pfeils anpassen */
-      padding-right: 2rem;
-    }
-  
-    input[type="number"] {
-      background-position: right 0.5rem center; /* Position des Number-Pfeils anpassen */
-      background-size: 10px 10px; /* Größe des Number-Pfeils anpassen */
-      padding-right: 2rem;
-    }
-  
-    .form-group-inline {
-      flex-direction: column; /* Inline-Elemente untereinander anordnen, falls nötig */
-      align-items: flex-start; /* Links ausrichten */
-    }
-  
-    .results, .card {
-      padding: 1rem; /* Padding der Ergebnisse/Karten reduzieren */
-      margin-top: 1.5rem;
-    }
-  
-    .result-item, .card-item {
-      margin-bottom: 0.75rem; /* Abstand zwischen Ergebnis-Items reduzieren */
-    }
-  
-    ul li {
-      padding-left: 1.5rem; /* Einrückung der Listenpunkte anpassen */
-    }
-  
-    ul li::before {
-      font-size: 1em; /* Größe des Listenpunkt-Pfeils anpassen */
-    }
-  
-    .subnet-group, .content-section {
-      padding: 1.25rem; /* Padding der Sektionen reduzieren */
-      margin-top: 1.5rem;
-    }
-  
-    table {
-      /* Auf kleinen Bildschirmen können Tabellen problematisch sein.
-         Eine Möglichkeit ist, die Tabelle scrollbar zu machen oder
-         responsive Tabellenmuster zu verwenden. Für diese einfache Tabelle
-         passen wir nur das Padding an. */
-    }
-  
-    th, td {
-      padding: 0.75rem 1rem; /* Padding in Tabellenzellen reduzieren */
-    }
-  
-    button, .btn, .btn-primary, .btn-secondary {
-      padding: 0.75rem 1.5rem; /* Padding der Buttons anpassen */
-      font-size: 0.9rem; /* Schriftgröße der Buttons anpassen */
-    }
-  
-    /* Anpassung für Scrollbar auf kleineren Bildschirmen, falls nötig */
-    ::-webkit-scrollbar {
-      width: 8px;
-      height: 8px;
-    }
-  }
+}
+/* Beispiel für pulseGlow mit variabler Farbe:
+   .element {
+     --current-glow-color: var(--neon-green); // Überschreibt die Standardfarbe
+     animation: pulseGlow 2s infinite;
+   }
+*/
