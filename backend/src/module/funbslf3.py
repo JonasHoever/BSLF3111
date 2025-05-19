@@ -1,4 +1,5 @@
 import math                                                                                         # Importiert das Math Modul
+import subfunc
 
 class Create():                                                                                     # Definiert die Klasse Create, diese wird in der app.py als calc Instanz zum Objekt definiert  
     def __init__(self):                                                                             # Konstruktor der Klasse, enthält die init Daten die beim erstellen einer function mit (self) aufgerufen wird
@@ -40,11 +41,13 @@ class Create():                                                                 
         mit einer festen 'prefix'-Länge, beginnend bei 'ipv4'.
         """
         # Validierung der Eingaben
-        if not (isinstance(prefix, int) and 0 <= prefix <= 32):
-            raise ValueError("Prefix muss eine ganze Zahl zwischen 0 und 32 sein.")
-        if countnet <= 0:
-            raise ValueError("Anzahl der Subnetze muss größer als 0 sein.")
-
+        ValidPrefix = subfunc.valid_prefix(prefix)
+        if ValidPrefix[0] == False:
+            raise ValueError(ValidPrefix[1])
+        ValidCountnet = subfunc.valid_countnet(countnet)
+        if ValidCountnet[0] == False:
+            raise ValueError(ValidCountnet[1])
+        
         # --- Variablen-Initialisierung nach außen verschoben ---
         netzmaske_bits = prefix
         netzmaske_dez = [] # Hier initialisiert
@@ -147,3 +150,12 @@ class Create():                                                                 
                 "last_host": last_host
             })
         return {"subnets": results}
+    
+    def symsubany(self, ipv4, prefix, countnet):                                                    # Definition der neuen methode symsubany
+        #Validierung der Daten
+        ValidPrefix = subfunc.valid_prefix(prefix)
+        if ValidPrefix[0] == False:
+            ValueError = ValidPrefix[1]
+        ValidCountnet = subfunc.valid_countnet(countnet)
+        if ValidCountnet[0] == False:
+            ValueError = ValidPrefix[1]
