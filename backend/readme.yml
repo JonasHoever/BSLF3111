@@ -1,0 +1,5 @@
+Fehler 1 | 23.04.2025 | Jonas
+    lokaler Start ohne gunicorn (ohne HTTP)
+    zum Öffnen der Projektes bitte die venv aktivieren 
+        source venv/bin/actiavte
+        python app.py
