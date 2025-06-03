@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, jsonify
-from src.module import funbslf3
+from src.module import funbslf3, subfunc
 #from src.module import funbslf3, sysbslf3
 app = Flask(__name__)
 calc = funbslf3.Create()
@@ -32,5 +32,9 @@ def apisymsubprefix():
     countnet = data.get('countnet')
     result = calc.symsubprefix(ipv4, prefix, countnet)
     return jsonify(result)
+
+@app.route("/symsubany")
+def symsubany():
+    return(render_template("symsubany.html"))
 
 app.run(host="0.0.0.0",port=3000,debug=True)

@@ -1,5 +1,5 @@
 import math                                                                                         # Importiert das Math Modul
-import subfunc
+from src.module import subfunc
 
 class Create():                                                                                     # Definiert die Klasse Create, diese wird in der app.py als calc Instanz zum Objekt definiert  
     def __init__(self):                                                                             # Konstruktor der Klasse, enthält die init Daten die beim erstellen einer function mit (self) aufgerufen wird
@@ -152,10 +152,16 @@ class Create():                                                                 
         return {"subnets": results}
     
     def symsubany(self, ipv4, prefix, countnet):                                                    # Definition der neuen methode symsubany
+        #Variablen & Listen
+        subnetzadressen = []
         #Validierung der Daten
         ValidPrefix = subfunc.valid_prefix(prefix)
         if ValidPrefix[0] == False:
             ValueError = ValidPrefix[1]
+        else:
+            pass
         ValidCountnet = subfunc.valid_countnet(countnet)
         if ValidCountnet[0] == False:
             ValueError = ValidPrefix[1]
+        else:
+            pass
