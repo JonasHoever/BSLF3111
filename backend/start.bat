@@ -18,3 +18,5 @@ echo venv wurde installiert.
 
 REM → Neue Konsole mit aktivierter venv und Start von app.py
 start cmd /k "venv\Scripts\activate.bat && python.exe -m pip install --upgrade pip && pip install flask && python app.py"
+
+.
