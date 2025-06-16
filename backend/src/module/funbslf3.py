@@ -1,5 +1,5 @@
 import math                                                                                         # Importiert das Math-Modul für mathematische Operationen wie den Logarithmus.
-from src.module import subfunc                                                                    # Importiert benutzerdefinierte Hilfsfunktionen aus einem anderen Modul.
+from src.module import subfunc                                                                      # Importiert benutzerdefinierte Hilfsfunktionen aus einem anderen Modul.
 
 class Create():                                                                                     # Definiert die Klasse Create, diese wird in der app.py als calc Instanz zum Objekt definiert.
     def __init__(self):                                                                             # Konstruktor der Klasse. Wird aufgerufen, wenn ein neues Objekt der Klasse erstellt wird.
@@ -83,42 +83,42 @@ class Create():                                                                 
             if current_base_ip_int > 0xFFFFFFFF:                                                    # Prüft auf einen Überlauf (größer als die maximale IPv4-Adresse 255.255.255.255).
                 break                                                                               # Beendet die Schleife, da keine weiteren gültigen IPv4-Adressen generiert werden können.
             
-            # --- Integer-IP zurück in Dotted-Decimal-Format umwandeln ---
+        # --- Integer-IP zurück in Dotted-Decimal-Format umwandeln ---
             current_base_ip_octets = []
             for j in range(4):
                 octet_value = (current_base_ip_int >> (8 * (3 - j))) & 0xFF                         # Extrahiert jedes 8-Bit-Oktett aus dem 32-Bit-Integer.
                 current_base_ip_octets.append(octet_value)
             current_base_ipv4_str = ".".join(map(str, current_base_ip_octets))
 
-            # --- Netzwerkadresse berechnen ---
+        # --- Netzwerkadresse berechnen ---
             network_address_arr = []
             for k in range(4):
                 network_address_arr.append(current_base_ip_octets[k] & netzmaske_dez[k])            # Bitweises UND zwischen der IP und der Netzmaske ergibt die Netzwerkadresse.
             network_address = ".".join(map(str, network_address_arr))
             
-            # --- Broadcast-Adresse berechnen ---
+        # --- Broadcast-Adresse berechnen ---
             broadcast_address_arr = []
             for k in range(4):
                 broadcast_address_arr.append(current_base_ip_octets[k] | (255 ^ netzmaske_dez[k]))  # Bitweises ODER zwischen der IP und der invertierten Netzmaske (Wildcard) ergibt die Broadcast-Adresse.
             broadcast_address = ".".join(map(str, broadcast_address_arr))
 
-            # --- Ersten und letzten nutzbaren Host berechnen ---
+        # --- Ersten und letzten nutzbaren Host berechnen ---
             first_host = "N/A"
             last_host = "N/A"
             if usable_hosts > 0:                                                                    # Nur berechnen, wenn es überhaupt nutzbare Hosts gibt.
                 first_host_arr = list(map(int, network_address.split(".")))
                 first_host_arr[3] += 1                                                              # Erster Host = Netzwerkadresse + 1.
                 
-                # Korrektur von Überläufen, falls die Netzwerkadresse auf .255 endet (selten, aber möglich).
+        # Korrektur von Überläufen, falls die Netzwerkadresse auf .255 endet (selten, aber möglich).
                 if first_host_arr[3] > 255:
                     first_host_arr[3] = 0
-                    first_host_arr[2] += 1 # Übertrag auf das 3. Oktett
-                    # Weitere Überträge müssten hier behandelt werden, ist für typische Szenarien aber nicht nötig.
+                    first_host_arr[2] += 1                                                          # Übertrag auf das 3. Oktett
+        # Weitere Überträge müssten hier behandelt werden, ist für typische Szenarien aber nicht nötig.
 
                 last_host_arr = list(map(int, broadcast_address.split(".")))
                 last_host_arr[3] -= 1                                                               # Letzter Host = Broadcast-Adresse - 1.
 
-                # Korrektur von Unterläufen, falls die Broadcast-Adresse auf .0 endet (selten).
+        # Korrektur von Unterläufen, falls die Broadcast-Adresse auf .0 endet (selten).
                 if last_host_arr[3] < 0:
                     last_host_arr[3] = 255
                     last_host_arr[2] -= 1 # "Borgen" vom 3. Oktett.
@@ -126,7 +126,7 @@ class Create():                                                                 
                 first_host = ".".join(map(str, first_host_arr))
                 last_host = ".".join(map(str, last_host_arr))
             
-            # --- Ergebnis für dieses Subnetz speichern ---
+        # --- Ergebnis für dieses Subnetz speichern ---
             results.append({
                 "subnet_number": i + 1,
                 "base_ipv4_input_for_this_subnet": current_base_ipv4_str,
