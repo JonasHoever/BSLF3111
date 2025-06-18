@@ -1,20 +1,22 @@
 @echo off
-echo Lade updates
-python.exe -m pip install --upgrade pip
-timeout /t 10 /nobreak >nul
-echo Alte virtuelle Umgebung wird gelöscht...
-rmdir /s /q venv
+REM =================================================================
+REM ==  GUI Control Center Starter                                 ==
+REM =================================================================
+REM
+REM  Dieses Skript startet das Python Control Center (main_gui.py).
+REM  Das Python-Skript wird sich selbstständig um die Erstellung
+REM  der virtuellen Umgebung und die Installation aller
+REM  notwendigen Pakete kümmern.
 
-echo Warte 2 Sekunden...
-timeout /t 2 /nobreak >nul
+echo.
+echo ===================================
+echo  Starte das Control Center...
+echo ===================================
+echo.
 
-echo Neue virtuelle Umgebung wird erstellt...
-python -m venv venv
+REM WICHTIG: Stellen Sie sicher, dass Ihr Python-Skript "main_gui.py" heisst.
+REM Wenn Sie es anders genannt haben, passen Sie den Befehl unten entsprechend an.
+python main_gui.py
 
-echo Warte 5 Sekunden für venv-Erstellung...
-timeout /t 5 /nobreak >nul
-
-echo venv wurde installiert.
-
-REM → Neue Konsole mit aktivierter venv und Start von app.py
-start cmd /k "venv\Scripts\activate.bat && python.exe -m pip install --upgrade pip && pip install flask && python app.py"
+pause
+exit
